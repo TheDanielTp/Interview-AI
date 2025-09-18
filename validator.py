@@ -1,46 +1,46 @@
 from ollama_helper import call_ollama
 
 class ValidatorAgent:
-    def validate_answer(self, state, question, answer):
-        if answer.strip() == "":
-            return False, False, "Answer is empty."
-
+    def __init__(self):
+        self.validation_attempts = {}
+    
+    def validate_answer(self, state):
+        enough = self.check_completeness(state)
+        return enough
+    
+    def check_completeness(self, state):
+        # Check if we have enough information to document the process
         conversation_text = state.get_conversation_text()
+        
+        # Require a minimum number of interactions
+        if len(state.conversation_history) < 5:
+            return False
+        
         prompt = f"""
-        You are validating the information gathered for documenting the process: {state.topic}
+        Attention: You're being used for an API call.
+        You are validating whether the following conversation about the process "{state.topic}" has enough information to create a complete and consistent process document that others could follow.
+
+        The process document should include:
+        - The purpose of the process.
+        - Inputs and outputs.
+        - Tools or resources required.
+        - Step-by-step instructions.
+        - Actors (who performs the process).
+        - Exceptions and how to handle them.
+        - Preconditions (what must be true before starting).
+        - Postconditions (what will be true after).
+        - Success criteria.
+        - Examples if available.
 
         Conversation history:
         {conversation_text}
 
-        Latest question: {question}
-        Latest answer: {answer}
+        Based on the above, does the conversation contain sufficient details for each of the above aspects?
+        Note: The conversation should contain details about each aspect ONLY if it is applicable to the process.
+        Note: Some aspects might not be applicable to every process, but we have to cover the applicable ones.
 
-        Evaluate the following:
-        1. Is the answer valid and relevant to the question? (yes/no)
-        2. Based on the entire conversation, do we have enough information to create a complete process document? Consider if we have:
-           - List of all ingredients/materials
-           - List of all tools/equipment
-           - Detailed step-by-step instructions
-           - Timing information where relevant
-           - Any other necessary details
-
-        Respond exactly in the format:
-        VALID: yes|no
-        ENOUGH: yes|no
+        Answer with only 'yes' or 'no'.
         """
-        response = call_ollama(prompt)
-        if response is None:
-            return True, False, "Error in validation."
-
-        valid_str = None
-        enough_str = None
-        lines = response.split('\n')
-        for line in lines:
-            if line.startswith("VALID:"):
-                valid_str = line.split(":")[1].strip().lower()
-            elif line.startswith("ENOUGH:"):
-                enough_str = line.split(":")[1].strip().lower()
         
-        valid = valid_str == 'yes' if valid_str else False
-        enough = enough_str == 'yes' if enough_str else False
-        return valid, enough, response
+        response = call_ollama(prompt)
+        return response and response.strip().lower().startswith('yes')

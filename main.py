@@ -25,22 +25,32 @@ def main():
         answer = input("You: ").strip()
         state.add_interaction(question, answer)
 
-        valid, enough, reason = validator.validate_answer(state, question, answer)
-        if not valid:
-            print(f"Validator: The answer was not valid. Reason: {reason}. Please try again.")
-            state.conversation_history.pop()  # Remove the invalid interaction
-            continue
+        enough = validator.validate_answer(state)
 
         if enough:
             state.is_complete = True
-        else:
-            print("Validator: Need more information. Continuing...")
 
     # Extract the process
     print("\nWe have enough information. Now extracting the process...")
+    
+    # First, show a summary of what was collected
+    print("\nSummary of collected information:")
+    for i, (question, answer) in enumerate(state.conversation_history):
+        if i > 0:  # Skip the initial topic question
+            print(f"Q: {question}")
+            print(f"A: {answer}\n")
+    
     document = extractor.extract_process(state)
     print("\nFinal Process Document:")
     print(document)
+    
+    # Option to save the document
+    save = input("\nWould you like to save this document? (y/n): ").strip().lower()
+    if save == 'y':
+        filename = f"{state.topic.replace(' ', '_')}_process.md"
+        with open(filename, 'w') as f:
+            f.write(document)
+        print(f"Document saved as {filename}")
 
 if __name__ == "__main__":
     main()
