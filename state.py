@@ -1,7 +1,7 @@
 class ProcessState:
     def __init__(self):
         self.topic = None
-        self.conversation_history = []  # list of dicts: {'question': '', 'answer': ''}
+        self.conversation_history = []
         self.is_complete = False
 
     def set_topic(self, topic):

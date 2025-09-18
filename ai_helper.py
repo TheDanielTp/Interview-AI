@@ -7,7 +7,7 @@ from typing import Optional
 
 class DeepSeekAPI:
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.getenv("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")
+        self.api_key = api_key or os.getenv("API") #TODO: Add a Deepseek API key
         self.base_url = "https://openrouter.ai/api/v1/chat/completions"
         self.model = "deepseek/deepseek-r1"
         
@@ -43,7 +43,7 @@ class DeepSeekAPI:
                 self.base_url,
                 headers=headers,
                 json=payload,
-                timeout=60  # 60 second timeout
+                timeout=60
             )
             
             if response.status_code == 200:
@@ -63,8 +63,7 @@ class DeepSeekAPI:
             print(f"Unexpected error: {e}")
             return None
 
-# Global instance
-deepseek_api = DeepSeekAPI("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")
+deepseek_api = DeepSeekAPI("API") #TODO: Add a Deepseek API key
 
-def call_deepseek(prompt: str, system_message: str = None) -> Optional[str]:
+def call_ollama(prompt: str, system_message: str = None) -> Optional[str]:
     return deepseek_api.call_api(prompt, system_message)

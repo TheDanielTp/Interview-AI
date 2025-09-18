@@ -9,7 +9,6 @@ def main():
     validator = ValidatorAgent()
     extractor = DataExtractorAgent()
 
-    # Get the topic
     print("Interviewer: What is the process you would like to describe?")
     topic = input("You: ").strip()
     if not topic:
@@ -18,7 +17,6 @@ def main():
     state.set_topic(topic)
     state.add_interaction("What is the process you would like to describe?", topic)
 
-    # Ask questions until enough info
     while not state.is_complete:
         question = interviewer.generate_question(state)
         print(f"Interviewer: {question}")
@@ -30,13 +28,11 @@ def main():
         if enough:
             state.is_complete = True
 
-    # Extract the process
     print("\nWe have enough information. Now extracting the process...")
     
-    # First, show a summary of what was collected
     print("\nSummary of collected information:")
     for i, (question, answer) in enumerate(state.conversation_history):
-        if i > 0:  # Skip the initial topic question
+        if i > 0:
             print(f"Q: {question}")
             print(f"A: {answer}\n")
     
@@ -44,7 +40,6 @@ def main():
     print("\nFinal Process Document:")
     print(document)
     
-    # Option to save the document
     save = input("\nWould you like to save this document? (y/n): ").strip().lower()
     if save == 'y':
         filename = f"{state.topic.replace(' ', '_')}_process.md"

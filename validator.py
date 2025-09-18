@@ -1,4 +1,4 @@
-from ollama_helper import call_ollama
+from ai_helper import call_ollama
 
 class ValidatorAgent:
     def __init__(self):
@@ -9,10 +9,8 @@ class ValidatorAgent:
         return enough
     
     def check_completeness(self, state):
-        # Check if we have enough information to document the process
         conversation_text = state.get_conversation_text()
         
-        # Require a minimum number of interactions
         if len(state.conversation_history) < 5:
             return False
         

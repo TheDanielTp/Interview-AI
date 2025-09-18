@@ -1,4 +1,4 @@
-from ollama_helper import call_ollama
+from ai_helper import call_ollama
 
 class InterviewerAgent:
     

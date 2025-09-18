@@ -1,10 +1,9 @@
-from ollama_helper import call_ollama
+from ai_helper import call_ollama
 
 class DataExtractorAgent:
     def extract_process(self, state):
         conversation_text = state.get_conversation_text()
         
-        # Now generate the structured document
         document_prompt = f"""
         Attention: You're being used for an API call.
         Create a comprehensive process document based on this conversation going on between an AI interviewer and a human user:
