@@ -1,4 +1,4 @@
-from ai_helper import call_ollama
+from ai_helper import call_ai
 
 class DataExtractorAgent:
     def extract_process(self, state):
@@ -44,7 +44,7 @@ class DataExtractorAgent:
         - Use consistent terminology
         """
         
-        document = call_ollama(document_prompt)
+        document = call_ai(document_prompt)
         if document is None:
             return "Error: Unable to generate document."
         

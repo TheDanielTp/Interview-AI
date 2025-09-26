@@ -1,4 +1,4 @@
-from ai_helper import call_ollama
+from ai_helper import call_ai
 
 class InterviewerAgent:
     
@@ -45,7 +45,7 @@ class InterviewerAgent:
         The user must feel they're talking to an interviewer, not an AI.
         """
         
-        question = call_ollama(prompt)
+        question = call_ai(prompt)
         if question is None:
             return "Can you tell me more about the process?"
         

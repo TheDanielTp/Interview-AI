@@ -1,4 +1,4 @@
-from ai_helper import call_ollama
+from ai_helper import call_ai
 
 class ValidatorAgent:
     def __init__(self):
@@ -40,5 +40,5 @@ class ValidatorAgent:
         Answer with only 'yes' or 'no'.
         """
         
-        response = call_ollama(prompt)
+        response = call_ai(prompt)
         return response and response.strip().lower().startswith('yes')

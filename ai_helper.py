@@ -65,5 +65,5 @@ class DeepSeekAPI:
 
 deepseek_api = DeepSeekAPI("API") #TODO: Add a Deepseek API key
 
-def call_ollama(prompt: str, system_message: str = None) -> Optional[str]:
+def call_ai(prompt: str, system_message: str = None) -> Optional[str]:
     return deepseek_api.call_api(prompt, system_message)
